@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import {getWeatherOneDay, getWeatherFiveDays} from '../utils/api';
 import Header from './Header';
 
 class Home extends React.Component{
@@ -13,7 +12,6 @@ class Home extends React.Component{
         };
 
         this.handleChange = this.handleChange.bind(this);
-        //this.getWeather = this.getWeather.bind(this);
     }
 
     handleChange(e){

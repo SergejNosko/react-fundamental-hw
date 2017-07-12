@@ -4,7 +4,7 @@ import Header from './Header';
 import queryString from 'query-string';
 import Loading from './Loading';
 import {Link} from 'react-router-dom';
-import {getWeatherOneDay, getWeatherFiveDays} from '../utils/api';
+import {getWeatherFiveDays} from '../utils/api';
 
 function WeatherGrid(props){
     let day = new Date(),
@@ -12,18 +12,17 @@ function WeatherGrid(props){
             month: 'short',
             day: 'numeric',
             weekday: 'long',
-        },
-        city = props.city;
+        };
     day.setDate(day.getDate() - 1);
     return(
         <ul className="weather">
-            {props.list.map((item) => {
+            {props.list.map((item, key) => {
                 day.setDate(day.getDate() + 1);
                 let dayString = day.toLocaleString("en-US", options);
                 return(
                 <Link to={{
-                    pathname: '/detail/' + city,
-                    state: {info: item}
+                    pathname: '/detail/' + props.city,
+                    state: {info: item, day: dayString, city: props.city}
                 }}>
                     <li className="day">
                         <img src={'app/images/weather-icons/' + item.weather[0].icon + '.svg'} alt="Weather icon"/>
@@ -51,7 +50,6 @@ class Forecast extends React.Component{
             loading: true
         }
     }
-
     componentDidMount(){
         let city = queryString.parse(this.props.location.search);
         console.log(city);
