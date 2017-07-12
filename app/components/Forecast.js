@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import Header from './Header';
 import queryString from 'query-string';
 import Loading from './Loading';
+import {Link} from 'react-router-dom';
 import {getWeatherOneDay, getWeatherFiveDays} from '../utils/api';
 
-function WeatherGrid(props) {
+function WeatherGrid(props){
     let day = new Date(),
         options = {
             month: 'short',
             day: 'numeric',
             weekday: 'long',
-        };
+        },
+        city = props.city;
     day.setDate(day.getDate() - 1);
     return(
         <ul className="weather">
@@ -19,17 +21,23 @@ function WeatherGrid(props) {
                 day.setDate(day.getDate() + 1);
                 let dayString = day.toLocaleString("en-US", options);
                 return(
+                <Link to={{
+                    pathname: '/detail/' + city,
+                    state: {info: item}
+                }}>
                     <li className="day">
                         <img src={'app/images/weather-icons/' + item.weather[0].icon + '.svg'} alt="Weather icon"/>
                         <p>{dayString}</p>
                     </li>
+                </Link>
                 )
             })}
         </ul>
     )
 }
 WeatherGrid.propTypes = {
-    list: PropTypes.array.isRequired
+    list: PropTypes.array.isRequired,
+    city: PropTypes.string.isRequired
 };
 
 class Forecast extends React.Component{
@@ -78,7 +86,7 @@ class Forecast extends React.Component{
                     <h2>{this.state.city}</h2>
                     {city === null && weather === null
                     ?<Loading />
-                        :<WeatherGrid list={this.state.weather}/>}
+                        :<WeatherGrid list={this.state.weather} city={city} />}
                 </article>
             </section>
         )
